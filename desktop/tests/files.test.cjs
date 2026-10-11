@@ -34,3 +34,17 @@ test('saving targets only the current file; older external revisions and deleted
   await assert.rejects(fs.access(file));
   assert.equal((await fs.readdir(root)).some(name => name.endsWith('.tmp')),false);
 });
+
+test('an external edit preserving the exact mtime is not overwritten', async t => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(),'study-preserved-time-'));
+  t.after(() => fs.rm(root,{recursive:true,force:true}));
+  const filename = path.join(root,'note.md');
+  const stamp = new Date('2020-01-01T00:00:00Z');
+  await fs.writeFile(filename,'读取时的原文');
+  await fs.utimes(filename,stamp,stamp);
+  const document = await readDocument(filename);
+  await fs.writeFile(filename,'外部改写的内容');
+  await fs.utimes(filename,stamp,stamp);
+  await assert.rejects(saveDocument(document,'本地编辑'),/其他程序修改/);
+  assert.equal(await fs.readFile(filename,'utf8'),'外部改写的内容');
+});

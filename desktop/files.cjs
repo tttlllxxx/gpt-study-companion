@@ -38,7 +38,8 @@ async function saveDocument(document, content) {
     if (error.code === 'ENOENT') throw new Error('文档已被删除，请另存或重新打开；未覆盖文件。');
     throw error;
   }
-  if (stat.mtimeMs !== document.mtime) throw new Error('文档已被其他程序修改，请保留当前编辑内容并重新打开。');
+  const original = await fs.readFile(document.path, 'utf8');
+  if (stat.mtimeMs !== document.mtime || original !== document.content) throw new Error('文档已被其他程序修改，请保留当前编辑内容并重新打开。');
   await atomicWrite(document.path, content, stat.mode);
   return readDocument(document.path);
 }

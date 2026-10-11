@@ -1143,7 +1143,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             showError("欢迎文档仅供阅读", detail: "请先打开自己的 Markdown 文档再保存。")
             return false
         }
-        if modificationDate() != lastKnownModificationDate {
+        let diskText = try? String(contentsOf: documentURL, encoding: .utf8)
+        if modificationDate() != lastKnownModificationDate || diskText != savedText {
             if isTestRun { return false }
             let alert = NSAlert()
             alert.messageText = "文档已被其他程序修改"
@@ -1367,8 +1368,18 @@ extension AppDelegate {
             try FileManager.default.removeItem(at: second)
             precondition(!persistDocument(), "A deleted document must not be silently recreated on save")
             try secondText.write(to: second, atomically: true, encoding: .utf8)
+            let frozenDate = Date(timeIntervalSince1970: 1700000000)
+            try FileManager.default.setAttributes([.modificationDate: frozenDate], ofItemAtPath: second.path)
             precondition(loadDocument(at: second))
-            print("PASS: external timestamp rollback and deleted-file save conflicts")
+            try "保留时间戳的外部版本".write(to: second, atomically: true, encoding: .utf8)
+            try FileManager.default.setAttributes([.modificationDate: frozenDate], ofItemAtPath: second.path)
+            editor.string = "不能覆盖外部内容"
+            precondition(!persistDocument(), "External content edits must be detected even when the timestamp is preserved")
+            let preservedExternal = try String(contentsOf: second, encoding: .utf8)
+            precondition(preservedExternal == "保留时间戳的外部版本")
+            try secondText.write(to: second, atomically: true, encoding: .utf8)
+            precondition(loadDocument(at: second))
+            print("PASS: external timestamp rollback, preserved timestamps and deleted-file save conflicts")
             let exitDocument = root.appendingPathComponent("退出测试.md")
             try "退出前的原文".write(to: exitDocument, atomically: true, encoding: .utf8)
             precondition(loadDocument(at: exitDocument))
