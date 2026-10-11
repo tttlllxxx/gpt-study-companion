@@ -49,11 +49,11 @@ function showDocument(result) {
 
 function renderFiles() {
   $('library-name').textContent = directory ? directory.split(/[\\/]/).filter(Boolean).at(-1) : '文档库';
-  const tree = {};
+  const tree = Object.create(null);
   for (const filename of library) {
     const relative = directory && filename.startsWith(directory) ? filename.slice(directory.length + 1) : filename.split(/[\\/]/).at(-1);
     const parts = relative.split(/[\\/]/); let branch = tree;
-    for (const part of parts.slice(0,-1)) branch = (branch[part] ||= {});
+    for (const part of parts.slice(0,-1)) branch = (branch[part] ||= Object.create(null));
     branch[parts.at(-1)] = filename;
   }
   const build = branch => {

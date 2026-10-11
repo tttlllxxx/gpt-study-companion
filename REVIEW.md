@@ -10,6 +10,7 @@
 4. **Markdown 原始 HTML 可以执行事件处理器。** 笔记中的 `img onerror` 等事件原先可在阅读页运行。现在两平台均对解析结果使用 DOMPurify；Windows 阅读页另处于无原生桥接权限的沙箱 iframe。已验证移除事件处理器并保留文档锚点。
 5. **macOS 声明的最低版本与实际二进制不同。** 原构建默认采用编译器的当前系统目标，而 Info.plist 声明 macOS 13。现在显式编译 macOS 13 目标，并合并 Intel 与 Apple Silicon 二进制供 Release 使用。
 6. **没有可运行的 Windows 版本。** 原项目完全依赖 AppKit/WebKit。现增加 Electron Windows 版，复用阅读样式、大纲导航、输入框定位和附件脚本，并在 Windows runner 上构建与检查，而非给 Mac 包改扩展名。
+7. **Windows 文件树遗漏 `constructor` 等目录名。** 初版目录结构使用普通 JavaScript 对象，会把这些合法目录名与继承的对象属性混淆。改为无原型字典，已在 Chromium 窗口里验证这种目录下的笔记可见，修复纳入 v1.0.2。
 
 ## 正确且已验证的行为
 

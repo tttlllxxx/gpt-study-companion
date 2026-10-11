@@ -14,6 +14,14 @@ module.exports = async ({ win, chat, app, fillComposer }) => {
     await win.webContents.executeJavaScript(`document.getElementById('sidebar-toggle').click()`);
     assert.equal(await win.webContents.executeJavaScript(`document.body.classList.contains('sidebar-hidden')`),true);
     await win.webContents.executeJavaScript(`document.getElementById('sidebar-toggle').click()`);
+    const constructorFolder = await win.webContents.executeJavaScript(`(() => {
+      directory = 'C:/notes';
+      library = ['C:/notes/constructor/child.md'];
+      current.path = library[0];
+      renderFiles();
+      return document.getElementById('files').textContent.includes('child');
+    })()`);
+    assert.equal(constructorFolder,true,'Folders named constructor must remain visible in the file tree');
     await chat.webContents.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(`<div data-message-author-role="assistant"><textarea>print('keep')</textarea></div><form><div contenteditable="true">原有问题</div></form>`));
     await chat.webContents.executeJavaScript(await fs.readFile(path.join(__dirname,'..','chat-composer.js'),'utf8'));
     await fillComposer('文档片段：中文问题 😀');
