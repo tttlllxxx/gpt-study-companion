@@ -1,0 +1,33 @@
+{
+  "name": "gpt-study-companion",
+  "version": "1.0.0",
+  "description": "Markdown reading and ChatGPT study companion",
+  "main": "desktop/main.cjs",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test desktop/tests/*.test.cjs",
+    "test:desktop": "electron . --self-test",
+    "dist:windows": "electron-builder --win portable --x64 --publish never"
+  },
+  "dependencies": {
+    "marked": "15.0.12",
+    "dompurify": "3.4.16"
+  },
+  "devDependencies": {
+    "electron": "44.7.0",
+    "electron-builder": "26.15.3"
+  },
+  "build": {
+    "appId": "local.gpt-study-companion.windows",
+    "productName": "GPT Study Companion",
+    "files": ["desktop/**", "reader.css", "reader-navigation.js", "chat-composer.js", "chat-attachment.js", "examples/**", "assets/app-icon.png"],
+    "directories": { "output": "release" },
+    "win": {
+      "target": "portable",
+      "icon": "assets/app-icon.png",
+      "artifactName": "GPTStudyCompanion-Windows-x64.${ext}"
+    }
+  }
+}

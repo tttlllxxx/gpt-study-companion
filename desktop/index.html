@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; frame-src 'self' about:; img-src 'self' data: file: https:;">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GPT 学习伴侣</title>
+  <link rel="stylesheet" href="workspace.css">
+</head>
+<body>
+  <main id="workspace">
+    <nav id="ribbon"><button id="sidebar-toggle" title="收起/展开侧栏">☰</button><button id="open-folder-ribbon" title="打开目录">▣</button></nav>
+    <aside id="sidebar">
+      <header><strong id="library-name">文档库</strong><button id="hide-sidebar" title="收起侧栏">‹</button></header>
+      <div class="tools"><button id="open-folder">打开目录</button><button id="open-file">打开文件</button><button id="refresh-files" title="刷新文件树">↻</button><button id="collapse-files" title="收起全部文件夹">⇈</button></div>
+      <div id="files"></div>
+    </aside>
+    <div id="sidebar-divider" class="divider" role="separator" aria-label="调整侧栏宽度"></div>
+    <section id="document-pane">
+      <header class="tab"><span id="document-name">欢迎</span><button id="attach">加入聊天</button><button id="mode">编辑</button></header>
+      <div class="tools path"><span id="document-path"></span><button id="outline" title="收起/展开文档大纲">≡</button><button id="search-toggle" title="查找（Ctrl+F）">⌕</button><button id="reload" title="重新加载">↻</button><button id="save" title="保存（Ctrl+S）">保存</button></div>
+      <div id="search-row" hidden><input id="search" placeholder="在文档中查找"><button id="find-next">下一处</button><button id="search-close">×</button></div>
+      <iframe id="reader" title="Markdown 阅读区" sandbox="allow-scripts"></iframe>
+      <textarea id="editor" aria-label="Markdown 源码" spellcheck="false" hidden></textarea>
+      <footer><input id="question" placeholder="选中文段后提问，留空可直接讲解"><button id="ask">提问</button></footer>
+    </section>
+    <div id="chat-divider" class="divider" role="separator" aria-label="调整聊天区域宽度"></div>
+    <section id="chat-pane"><header class="tab"><strong>ChatGPT</strong><button id="insert">插入选中回答</button><button id="refresh-chat">↻</button></header><div id="chat-slot"></div></section>
+  </main>
+  <div id="status" role="status">正在加载…</div>
+  <script src="../node_modules/marked/lib/marked.umd.js"></script>
+  <script src="../node_modules/dompurify/dist/purify.min.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>

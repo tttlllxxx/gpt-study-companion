@@ -1,0 +1,17 @@
+:root { color-scheme: light dark; --bg: #fff; --secondary: #f4f4f4; --text: #303338; --muted: #777; --border: #e5e5e5; --accent: #7f6df2; --sidebar: 220px; --chat: 38%; }
+@media(prefers-color-scheme:dark) { :root { --bg:#1e1e1e; --secondary:#262626; --text:#dcddde; --muted:#aaa; --border:#363636; } }
+* { box-sizing:border-box; } body { margin:0; overflow:hidden; background:var(--bg); color:var(--text); font:13px 'Segoe UI', 'Microsoft YaHei', sans-serif; }
+button,input,textarea { font:inherit; color:inherit; } button { background:transparent; border:0; border-radius:5px; padding:6px 8px; cursor:pointer; white-space:nowrap; } button:hover { background:#7f6df21f; } button:disabled { opacity:.45; cursor:default; } input { background:var(--bg); border:1px solid var(--border); border-radius:5px; padding:5px 8px; min-width:0; } button:focus-visible,input:focus-visible { outline:2px solid var(--accent); }
+#workspace { display:grid; grid-template-columns:44px var(--sidebar) 5px minmax(280px,1fr) 5px minmax(320px,var(--chat)); height:calc(100vh - 24px); }
+#ribbon { display:flex; flex-direction:column; align-items:center; gap:10px; padding:12px 5px; background:var(--secondary); }
+#sidebar { display:flex; flex-direction:column; background:var(--secondary); overflow:hidden; }
+#sidebar header { display:flex; align-items:center; padding:14px 8px 8px 14px; } #library-name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.tools { display:flex; align-items:center; gap:3px; padding:5px 8px; } #sidebar .tools { flex-wrap:wrap; } .divider { cursor:col-resize; background:var(--border); } .divider:hover,.divider.dragging { background:var(--accent); }
+#files { flex:1; overflow:auto; padding:8px; } #files details { margin:3px 0; } #files summary { cursor:pointer; padding:5px; } #files .children { margin-left:12px; } #files button { display:block; width:100%; text-align:left; overflow:hidden; text-overflow:ellipsis; } #files button.active { color:var(--accent); background:#7f6df21f; }
+#document-pane,#chat-pane { min-width:0; overflow:hidden; display:flex; flex-direction:column; } .tab { display:flex; align-items:center; gap:7px; height:42px; flex-shrink:0; padding:5px 12px; background:var(--secondary); } #document-name { flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-weight:600; } #chat-pane strong { flex:1; }
+.path { height:35px; flex-shrink:0; border-bottom:1px solid var(--border); } #document-path { flex:1; color:var(--muted); font-size:11px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+#reader,#editor { flex:1; width:100%; min-height:0; border:0; background:var(--bg); } #editor { resize:none; outline:none; padding:30px 34px; font:14px/1.6 Consolas, monospace; }
+#search-row { display:flex; gap:5px; padding:4px 8px; flex-shrink:0; } #search { flex:1; } #document-pane footer { display:flex; gap:8px; padding:9px 12px; border-top:1px solid var(--border); flex-shrink:0; } #question { flex:1; border:0; } #ask,#attach { color:var(--accent); }
+#chat-slot { flex:1; } #status { height:24px; padding:4px 12px; font-size:11px; color:var(--muted); border-top:1px solid var(--border); }
+body.sidebar-hidden { --sidebar:0px; } body.sidebar-hidden #sidebar,body.sidebar-hidden #sidebar-divider { display:none; } body.sidebar-hidden #workspace { grid-template-columns:44px 0px 0px minmax(280px,1fr) 5px minmax(320px,var(--chat)); }
+[hidden] { display:none!important; }
